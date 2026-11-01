@@ -63,14 +63,40 @@
         .root-2 { view-transition-name: tag-khanang; }
         .root-3 { view-transition-name: tag-catinh; }
         .root-4 { view-transition-name: tag-giatri; }
-        .fruit {
+        .fruit-pacman {
             position: absolute;
-            width: 26px;  
-            height: 26px;
-            background-color: #f97316; /* Màu cam */
-            border-radius: 50%; 
-            box-shadow: inset -4px -4px 8px rgba(0,0,0,0.3), 0 2px 5px rgba(0,0,0,0.2); 
+            /* Tọa độ đặt quả - Bạn có thể chỉnh số % để dời quả đi chỗ khác */
+            top: 30%; 
+            left: 70%; 
+            
+            /* Tạo hình tròn */
+            width: 60px;
+            height: 60px;
+            background-color: #f97316; /* Màu cam giống quả */
+            border-radius: 50%;
+            border: 3px solid #fff;
+            box-shadow: inset -5px -5px 10px rgba(0,0,0,0.3), 0 5px 15px rgba(249, 115, 22, 0.5);
+            
+            /* Căn giữa chữ */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            
+            /* Định dạng chữ */
+            color: #fff;
+            font-weight: 800;
+            font-size: 0.6rem;
+            text-decoration: none;
+            text-transform: uppercase;
+            
             z-index: 10;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        /* Hiệu ứng khi rê chuột vào quả */
+        .fruit-pacman:hover {
+            transform: scale(1.2) rotate(10deg);
+            background-color: #ea580c; /* Màu cam đậm hơn */
         }
         @view-transition {
             navigation: auto;
@@ -105,6 +131,13 @@
             .root-2 { top: 90%; left: 30%; }  
             .root-3 { top: 90%; right: 30%; } 
             .root-4 { top: 78%; right: 25%; } 
+            .fruit-pacman {
+                width: 40px;
+                height: 40px;
+                font-size: 0.4rem;
+                top: 35%; 
+                left: 75%; 
+            }
         }
     </style>
 </head>
@@ -116,18 +149,7 @@
     <div class="scene-container">
         <div class="tree-wrapper">
             <img src="cay.png" alt="Cây Nghề Nghiệp" class="tree-image">
-            
-            <div class="fruit" style="top: 20%; left: 35%;"></div>
-            <div class="fruit" style="top: 25%; left: 60%;"></div>
-            <div class="fruit" style="top: 18%; left: 50%;"></div>
-            <div class="fruit" style="top: 35%; left: 75%;"></div>
-            <div class="fruit" style="top: 40%; left: 25%;"></div>
-            <div class="fruit" style="top: 45%; left: 40%;"></div>
-            <div class="fruit" style="top: 50%; left: 65%;"></div>
-            <div class="fruit" style="top: 30%; left: 20%;"></div>
-            <div class="fruit" style="top: 55%; left: 30%;"></div>
-            <div class="fruit" style="top: 48%; left: 80%;"></div>
-
+            <a href="pacmans.html" class="fruit-pacman">Pac-Man</a>
             <a href="phamchat-sothich.html" class="root-btn root-1">Sở thích</a>
             <a href="phamchat-khanang.html" class="root-btn root-2">Khả năng</a>
             <a href="phamchat-catinh.html" class="root-btn root-3">Cá tính</a>
