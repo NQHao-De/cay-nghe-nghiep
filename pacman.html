@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thành quả – Pac-Man</title>
+    <style>
+        :root {
+            --border: #cbd5e1;
+            --navbar-height: 64px;
+            --primary: #2563eb;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: #0f172a;
+            color: #f8fafc;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: var(--navbar-height);
+        }
+        
+        .navbar {
+            position: fixed; top: 0; left: 0; right: 0; height: var(--navbar-height);
+            background: #ffffff; border-bottom: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 24px; z-index: 1000;
+        }
+        .navbar-brand { text-decoration: none; color: #1e40af; font-size: 1.2rem; font-weight: 800; }
+        .navbar-links { display: flex; gap: 8px; }
+        .nav-link { padding: 10px 18px; border-radius: 8px; text-decoration: none; color: #1e293b; font-weight: 600; }
+        .nav-link.active { background: var(--primary); color: #ffffff; }
+
+        .game-container {
+            margin-top: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+            background: #1e293b;
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border: 2px solid #334155;
+            max-width: 95vw;
+        }
+
+        h1 { color: #facc15; margin-bottom: 10px; font-size: 2rem; text-transform: uppercase; }
+        
+        .toolbar {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .tool-btn {
+            padding: 10px 24px;
+            font-size: 1rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-start { background: #10b981; color: white; }
+        .btn-start:hover { background: #059669; }
+        .btn-stop { background: #ef4444; color: white; }
+        .btn-stop:hover { background: #dc2626; }
+        .tool-btn:disabled { background: #475569; cursor: not-allowed; opacity: 0.5; }
+
+        .canvas-wrapper {
+            position: relative;
+            max-width: 100%;
+            overflow-x: auto;
+            overflow-y: hidden;
+            border-radius: 10px;
+            background: #000;
+        }
+
+        canvas {
+            background: #000000;
+            display: block;
+        }
+
+        .screen-overlay {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(15, 23, 42, 0.85);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+            backdrop-filter: blur(4px);
+            transition: opacity 0.3s ease;
+        }
+        .screen-overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        .screen-overlay h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #facc15;
+            text-shadow: 0 0 10px rgba(250, 204, 21, 0.5);
+        }
+        .btn-play {
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.5);
+            transition: transform 0.2s, background 0.2s;
+        }
+        .btn-play:hover {
+            background: #2563eb;
+            transform: scale(1.05);
+        }
+
+        .mobile-controls {
+            display: none;
+            margin-top: 20px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            width: 200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .control-btn {
+            background: #334155; color: white; border: none;
+            padding: 15px; font-size: 1.5rem; border-radius: 10px;
+            cursor: pointer; user-select: none;
+        }
+        .control-btn:active { background: #475569; }
+        .btn-up { grid-column: 2; }
+        .btn-left { grid-column: 1; grid-row: 2; }
+        .btn-down { grid-column: 2; grid-row: 2; }
+        .btn-right { grid-column: 3; grid-row: 2; }
+
+        @media (max-width: 850px) {
+            .mobile-controls { display: grid; }
+            h1 { font-size: 1.5rem; }
+            .screen-overlay h2 { font-size: 1.8rem; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="index.html" class="navbar-brand">CÂY NGHỀ NGHIỆP</a>
+        <div class="navbar-links">
+            <a href="phamchat.html" class="nav-link">Phẩm chất</a>
+            <a href="thanhqua.html" class="nav-link active">Thành quả</a>
+        </div>
+    </nav>
+
+    <div class="game-container">
+        <h1>Pac-Man</h1>
+        
+        <div class="toolbar">
+            <button id="btnStart" class="tool-btn btn-start" onclick="startGame()">Bắt đầu</button>
+            <button id="btnStop" class="tool-btn btn-stop" onclick="stopGame()" disabled>Dừng</button>
+        </div>
+        
+        <div class="canvas-wrapper">
+            <canvas id="gameCanvas" width="800" height="520"></canvas>
+            
+            <div id="gameOverlay" class="screen-overlay">
+                <h2 id="overlayTitle">SẴN SÀNG?</h2>
+                <p id="overlayText" style="color: white; margin-bottom: 20px; font-size: 1.1rem;"></p>
+                <button id="btnPlay" class="btn-play" onclick="startGame()">CHƠI NGAY</button>
+            </div>
+        </div>
+        
+        <div class="mobile-controls">
+            <button class="control-btn btn-up" onclick="setDirection(3)">↑</button>
+            <button class="control-btn btn-left" onclick="setDirection(2)">←</button>
+            <button class="control-btn btn-down" onclick="setDirection(1)">↓</button>
+            <button class="control-btn btn-right" onclick="setDirection(0)">→</button>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        const overlay = document.getElementById('gameOverlay');
+        const overlayTitle = document.getElementById('overlayTitle');
+        const overlayText = document.getElementById('overlayText');
+        const btnPlay = document.getElementById('btnPlay');
+        const btnStart = document.getElementById('btnStart');
+        const btnStop = document.getElementById('btnStop');
+
+        const tileSize = 40; 
+        const rows = 13;
+        const cols = 20;
+
+        const initialMap = [
+            [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 1],
+            [1, 2, 1, 2, 1, 2, 1, 2, 1, 1, 1, 2, 1, 2, 1, 2, 1, 1, 2, 1],
+            [1, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 1],
+            [1, 2, 1, 2, 1, 2, 1, 1, 1, 3, 1, 1, 1, 2, 1, 2, 1, 1, 2, 1],
+            [1, 2, 2, 2, 1, 2, 1, 4, 4, 4, 4, 4, 1, 2, 1, 2, 2, 2, 2, 1],
+            [1, 1, 1, 2, 1, 2, 1, 4, 4, 4, 4, 4, 1, 2, 1, 2, 1, 1, 1, 1],
+            [1, 2, 2, 2, 2, 2, 1, 4, 4, 4, 4, 4, 1, 2, 2, 2, 2, 2, 2, 1],
+            [1, 2, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 2, 1],
+            [1, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 1],
+            [1, 1, 1, 2, 1, 1, 1, 2, 1, 1, 1, 2, 1, 1, 1, 2, 1, 1, 2, 1],
+            [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+        ];
+
+        let map, player, mouthAngle, mouthOpening, ghosts, score, totalFood;
+        let gameOver = false;
+        let isPlaying = false;
+        let animationId;
+        
+        // TỐC ĐỘ NHỊP ĐI (ms): Càng nhỏ đi càng nhanh
+        const playerMoveTime = 300; 
+        const ghostMoveTime = 350; 
+
+        const ghostStartPositions = [
+            { x: 9, y: 5, color: '#ef4444' },
+            { x: 10, y: 5, color: '#ec4899' },
+            { x: 9, y: 6, color: '#06b6d4' },
+            { x: 10, y: 6, color: '#f97316' }
+        ];
+
+        let nextDir = -1;
+
+        function initGame() {
+            map = JSON.parse(JSON.stringify(initialMap));
+            
+            // Tọa độ LOGIC (số nguyên, dùng để tính toán)
+            // Tọa độ HIỂN THỊ (số thực, dùng để vẽ mượt mà)
+            player = { 
+                x: 1, y: 1, dir: 0, nextDir: -1, lastMove: 0,
+                renderX: 1, renderY: 1 
+            };
+            
+            mouthAngle = 0; 
+            mouthOpening = true; 
+            
+            ghosts = ghostStartPositions.map((g, index) => ({ 
+                x: g.x, 
+                y: g.y, 
+                color: g.color,
+                state: 'exiting', 
+                dir: { dx: 0, dy: -1 },
+                releaseTimer: index * 2,
+                lastMove: 0,
+                renderX: g.x,
+                renderY: g.y
+            }));
+            
+            score = 0;
+            totalFood = 0;
+            gameOver = false;
+            nextDir = -1;
+            
+            for (let r = 0; r < rows; r++) {
+                for (let c = 0; c < cols; c++) {
+                    if (map[r][c] === 2) totalFood++;
+                }
+            }
+            draw();
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            for (let r = 0; r < rows; r++) {
+                for (let c = 0; c < cols; c++) {
+                    if (map[r][c] === 1) {
+                        ctx.fillStyle = '#1e40af';
+                        ctx.fillRect(c * tileSize, r * tileSize, tileSize, tileSize);
+                        ctx.strokeStyle = '#3b82f6';
+                        ctx.strokeRect(c * tileSize, r * tileSize, tileSize, tileSize);
+                    } else if (map[r][c] === 3) {
+                        ctx.fillStyle = '#ec4899';
+                        ctx.fillRect(c * tileSize, r * tileSize, tileSize, tileSize);
+                    } else if (map[r][c] === 4) {
+                        ctx.fillStyle = '#334155';
+                        ctx.fillRect(c * tileSize, r * tileSize, tileSize, tileSize);
+                    } else if (map[r][c] === 2) {
+                        ctx.fillStyle = '#facc15';
+                        ctx.beginPath();
+                        ctx.arc(c * tileSize + tileSize/2, r * tileSize + tileSize/2, 4, 0, Math.PI * 2);
+                        ctx.fill();
+                    }
+                }
+            }
+
+            // Vẽ Pac-Man dựa trên tọa độ hiển thị (render)
+            const cx = player.renderX * tileSize + tileSize/2;
+            const cy = player.renderY * tileSize + tileSize/2;
+            const radius = tileSize/2 - 4;
+            
+            const baseAngle = player.dir * Math.PI / 2;
+            const startAngle = baseAngle + (mouthAngle * Math.PI / 180);
+            const endAngle = baseAngle + (2 * Math.PI) - (mouthAngle * Math.PI / 180);
+
+            ctx.fillStyle = '#facc15';
+            ctx.beginPath();
+            ctx.moveTo(cx, cy);
+            ctx.arc(cx, cy, radius, startAngle, endAngle);
+            ctx.closePath();
+            ctx.fill();
+
+            // Vẽ Ma dựa trên tọa độ hiển thị
+            ghosts.forEach(ghost => {
+                const gx = ghost.renderX * tileSize + tileSize/2;
+                const gy = ghost.renderY * tileSize + tileSize/2;
+                
+                ctx.fillStyle = ghost.color;
+                ctx.beginPath();
+                ctx.arc(gx, gy - 5, tileSize/2 - 6, Math.PI, 0);
+                ctx.lineTo(gx + tileSize/2 - 6, gy + tileSize/2 - 6);
+                ctx.lineTo(gx - tileSize/2 + 6, gy + tileSize/2 - 6);
+                ctx.fill();
+
+                ctx.fillStyle = '#ffffff';
+                ctx.beginPath();
+                ctx.arc(gx - 6, gy - 5, 5, 0, Math.PI * 2);
+                ctx.arc(gx + 6, gy - 5, 5, 0, Math.PI * 2);
+                ctx.fill();
+                
+                ctx.fillStyle = '#000000';
+                ctx.beginPath();
+                ctx.arc(gx - 6, gy - 5, 2, 0, Math.PI * 2);
+                ctx.arc(gx + 6, gy - 5, 2, 0, Math.PI * 2);
+                ctx.fill();
+            });
+
+            ctx.fillStyle = '#ffffff';
+            ctx.font = '22px Arial';
+            ctx.fillText('Điểm: ' + score, 15, 30);
+        }
+
+        function updatePlayer(timestamp) {
+            if (gameOver || !isPlaying) return;
+
+            // 1. Đổi hướng (logic)
+            if (nextDir !== -1) {
+                let dx = nextDir === 0 ? 1 : nextDir === 2 ? -1 : 0;
+                let dy = nextDir === 1 ? 1 : nextDir === 3 ? -1 : 0;
+                let nx = player.x + dx;
+                let ny = player.y + dy;
+                if (map[ny][nx] !== 1 && map[ny][nx] !== 3 && map[ny][nx] !== 4) {
+                    player.dir = nextDir;
+                    nextDir = -1;
+                }
+            }
+
+            // 2. Di chuyển logic theo nhịp
+            if (timestamp - player.lastMove > playerMoveTime) {
+                let dx = player.dir === 0 ? 1 : player.dir === 2 ? -1 : 0;
+                let dy = player.dir === 1 ? 1 : player.dir === 3 ? -1 : 0;
+                let nx = player.x + dx;
+                let ny = player.y + dy;
+                
+                if (map[ny][nx] !== 1 && map[ny][nx] !== 3 && map[ny][nx] !== 4) {
+                    player.x = nx;
+                    player.y = ny;
+                    
+                    if (map[ny][nx] === 2) {
+                        map[ny][nx] = 0;
+                        score += 10;
+                        totalFood--;
+                        checkWin();
+                    }
+                }
+                player.lastMove = timestamp;
+            }
+
+            // 3. Làm mượt tọa độ hiển thị (Nội suy)
+            player.renderX += (player.x - player.renderX) * 0.15;
+            player.renderY += (player.y - player.renderY) * 0.15;
+        }
+
+        function updateGhosts(timestamp) {
+            if (gameOver || !isPlaying) return;
+            
+            ghosts.forEach((ghost, index) => {
+                // 1. Di chuyển logic theo nhịp
+                if (timestamp - ghost.lastMove > ghostMoveTime) {
+                    if (ghost.state === 'exiting') {
+                        if (ghost.releaseTimer > 0) {
+                            ghost.releaseTimer--;
+                        } else {
+                            let exitX = 9, exitY = 4;
+                            if (ghost.x === exitX && ghost.y === exitY) {
+                                ghost.state = 'wander';
+                            } else {
+                                let path = findPath(ghost.x, ghost.y, exitX, exitY, true);
+                                if (path.length > 0) {
+                                    ghost.x += path[0].dx;
+                                    ghost.y += path[0].dy;
+                                }
+                            }
+                        }
+                    } else if (ghost.state === 'wander') {
+                        const isBlocked = (x, y, currentIndex) => {
+                            if (x < 0 || x >= cols || y < 0 || y >= rows) return true;
+                            let cell = map[y][x];
+                            if (cell === 1 || cell === 3 || cell === 4) return true; 
+                            return ghosts.some((g, i) => i !== currentIndex && g.x === x && g.y === y);
+                        };
+
+                        let validMoves = [];
+                        const directions = [
+                            { dx: 0, dy: -1 }, { dx: 0, dy: 1 }, 
+                            { dx: -1, dy: 0 }, { dx: 1, dy: 0 }
+                        ];
+
+                        directions.forEach(d => {
+                            let nx = ghost.x + d.dx;
+                            let ny = ghost.y + d.dy;
+                            if (!isBlocked(nx, ny, index)) {
+                                if (!(d.dx === -ghost.dir.dx && d.dy === -ghost.dir.dy)) {
+                                    validMoves.push(d);
+                                }
+                            }
+                        });
+
+                        if (validMoves.length === 0) {
+                            let backDir = { dx: -ghost.dir.dx, dy: -ghost.dir.dy };
+                            if (!isBlocked(ghost.x + backDir.dx, ghost.y + backDir.dy, index)) {
+                                validMoves.push(backDir);
+                            }
+                        }
+
+                        if (validMoves.length > 1) {
+                            let straightMove = validMoves.find(d => d.dx === ghost.dir.dx && d.dy === ghost.dir.dy);
+                            if (straightMove && Math.random() < 0.5) {
+                                // Đi thẳng
+                            } else {
+                                ghost.dir = validMoves[Math.floor(Math.random() * validMoves.length)];
+                            }
+                        } else if (validMoves.length === 1) {
+                            ghost.dir = validMoves[0];
+                        }
+
+                        ghost.x += ghost.dir.dx;
+                        ghost.y += ghost.dir.dy;
+                    }
+                    ghost.lastMove = timestamp;
+                }
+
+                // 2. Làm mượt tọa độ hiển thị
+                ghost.renderX += (ghost.x - ghost.renderX) * 0.08;
+                ghost.renderY += (ghost.y - ghost.renderY) * 0.08;
+            });
+        }
+
+        function findPath(startX, startY, targetX, targetY, allowGhostHouse) {
+            let queue = [{ x: startX, y: startY, path: [] }];
+            let visited = new Set();
+            visited.add(`${startX},${startY}`);
+
+            const directions = [
+                { dx: 0, dy: -1 }, { dx: 0, dy: 1 }, 
+                { dx: -1, dy: 0 }, { dx: 1, dy: 0 }
+            ];
+
+            while (queue.length > 0) {
+                let current = queue.shift();
+                if (current.x === targetX && current.y === targetY) {
+                    return current.path;
+                }
+
+                for (let d of directions) {
+                    let nx = current.x + d.dx;
+                    let ny = current.y + d.dy;
+
+                    if (nx >= 0 && nx < cols && ny >= 0 && ny < rows) {
+                        let cell = map[ny][nx];
+                        if (cell !== 1 && (allowGhostHouse || (cell !== 3 && cell !== 4))) {
+                            let key = `${nx},${ny}`;
+                            if (!visited.has(key)) {
+                                visited.add(key);
+                                queue.push({ 
+                                    x: nx, 
+                                    y: ny, 
+                                    path: [...current.path, { dx: d.dx, dy: d.dy }] 
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+            return [];
+        }
+
+        function checkWin() {
+            if (totalFood === 0 && !gameOver) {
+                gameOver = true;
+                stopGame();
+                overlayTitle.innerText = "BẠN ĐÃ THẮNG!";
+                overlayTitle.style.color = "#10b981";
+                overlayText.innerText = "Điểm của bạn: " + score;
+                btnPlay.innerText = "CHƠI LẠI";
+                overlay.classList.remove('hidden');
+            }
+        }
+
+        function checkCollision() {
+            if (gameOver) return;
+            ghosts.forEach(ghost => {
+                if (ghost.x === player.x && ghost.y === player.y) {
+                    gameOver = true;
+                    stopGame();
+                    overlayTitle.innerText = "GAME OVER!";
+                    overlayTitle.style.color = "#ef4444";
+                    overlayText.innerText = "Bạn bị ma bắt rồi. Điểm: " + score;
+                    btnPlay.innerText = "CHƠI LẠI";
+                    overlay.classList.remove('hidden');
+                }
+            });
+        }
+
+        function setDirection(dir) {
+            nextDir = dir;
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowUp') setDirection(3);
+            if (e.key === 'ArrowDown') setDirection(1);
+            if (e.key === 'ArrowLeft') setDirection(2);
+            if (e.key === 'ArrowRight') setDirection(0);
+        });
+
+        function gameLoop(timestamp) {
+            if (!isPlaying) return;
+
+            updatePlayer(timestamp);
+            updateGhosts(timestamp);
+            
+            if (mouthOpening) {
+                mouthAngle += 4;
+                if (mouthAngle >= 25) mouthOpening = false;
+            } else {
+                mouthAngle -= 4;
+                if (mouthAngle <= 0) mouthOpening = true;
+            }
+
+            draw();
+            checkCollision();
+            animationId = requestAnimationFrame(gameLoop);
+        }
+
+        function startGame() {
+            initGame();
+            isPlaying = true;
+            gameOver = false;
+            
+            overlay.classList.add('hidden');
+            btnStart.disabled = true;
+            btnStop.disabled = false;
+
+            cancelAnimationFrame(animationId);
+            animationId = requestAnimationFrame(gameLoop);
+        }
+
+        function stopGame() {
+            isPlaying = false;
+            btnStart.disabled = false;
+            btnStop.disabled = true;
+            cancelAnimationFrame(animationId);
+        }
+
+        initGame();
+        overlayTitle.innerText = "PAC-MAN";
+        overlayTitle.style.color = "#facc15";
+        overlayText.innerText = "Ăn hết chấm vàng và né ma!";
+        btnPlay.innerText = "CHƠI NGAY";
+    </script>
+</body>
+</html>

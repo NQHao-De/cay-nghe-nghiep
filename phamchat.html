@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PHẨM CHẤT – Cây Nghề Nghiệp</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --text-main: #f8fafc;
+            --root-color: #3b82f6; 
+            --border: #334155;
+            --navbar-height: 64px;
+            --primary: #2563eb;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: #ffffff;
+            color: var(--text-main);
+            min-height: 100vh;
+            overflow: hidden;
+        }
+        .navbar {
+            position: fixed; top: 0; left: 0; right: 0; height: var(--navbar-height);
+            background: #ffffff; border-bottom: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 24px; z-index: 1000;
+        }
+        .navbar-brand { text-decoration: none; color: #1e40af; font-size: 1.2rem; font-weight: 800; }
+        .navbar-links { display: flex; gap: 8px; }
+        .nav-link { padding: 10px 18px; border-radius: 8px; text-decoration: none; color: #1e293b; font-weight: 600; }
+        .nav-link.active { background: var(--primary); color: #ffffff; }
+
+        .scene-container {
+            position: relative; width: 100vw; height: 100vh;
+            display: flex; justify-content: center; align-items: center;
+            padding-top: var(--navbar-height);
+        }
+        
+        .tree-wrapper {
+            position: relative; width: 800px; height: 600px; 
+        }
+        .tree-image {
+            width: 100%; height: 100%;
+            object-fit: contain; 
+        }
+        .root-btn {
+            position: absolute; background: var(--root-color); color: #fff;
+            padding: 6px 12px; border-radius: 30px; font-weight: 700; font-size: 1.1rem;
+            cursor: pointer; box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+            transition: all 0.3s ease; border: 2px solid #93c5fd; white-space: nowrap; z-index: 10;
+            text-decoration: none; display: inline-block;
+        }
+        .root-btn:hover { background: #2563eb; transform: scale(1.1); }
+        .root-1 { top: 78%; left: 23%; } 
+        .root-2 { top: 88%; left: 30%; }  
+        .root-3 { top: 88%; right: 30%; } 
+        .root-4 { top: 78%; right: 25%; }
+        /* hieu ung*/
+        .tree-wrapper { view-transition-name: tree; }
+        .root-1 { view-transition-name: tag-sothich; }
+        .root-2 { view-transition-name: tag-khanang; }
+        .root-3 { view-transition-name: tag-catinh; }
+        .root-4 { view-transition-name: tag-giatri; }
+        .fruit {
+            position: absolute;
+            width: 26px;  
+            height: 26px;
+            background-color: #f97316; /* Màu cam */
+            border-radius: 50%; 
+            box-shadow: inset -4px -4px 8px rgba(0,0,0,0.3), 0 2px 5px rgba(0,0,0,0.2); 
+            z-index: 10;
+        }
+        @view-transition {
+            navigation: auto;
+        }
+        ::view-transition-group(*) {
+            animation-duration: 0.5s;
+        }
+        /*dien thoai*/
+        @media (max-width: 900px) {
+            .tree-wrapper { 
+                width: 100%; 
+                max-width: 100%; 
+                height: 55vh; 
+                margin-top: 20px;
+                position: relative;
+            }
+            .tree-image {
+                object-fit: contain; 
+            }
+            
+            /* Thu nhỏ nút */
+            .root-btn { 
+                padding: 5px 10px; 
+                font-size: 0.75rem; 
+                white-space: nowrap;
+            }
+            .root-1, .root-2, .root-3, .root-4 {
+                transform: none; 
+            }
+
+            .root-1 { top: 78%; left: 25%; }  
+            .root-2 { top: 90%; left: 30%; }  
+            .root-3 { top: 90%; right: 30%; } 
+            .root-4 { top: 78%; right: 25%; } 
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="index.html" class="navbar-brand">CÂY NGHỀ NGHIỆP</a>
+    </nav>
+
+    <div class="scene-container">
+        <div class="tree-wrapper">
+            <img src="cay.png" alt="Cây Nghề Nghiệp" class="tree-image">
+            
+            <div class="fruit" style="top: 20%; left: 35%;"></div>
+            <div class="fruit" style="top: 25%; left: 60%;"></div>
+            <div class="fruit" style="top: 18%; left: 50%;"></div>
+            <div class="fruit" style="top: 35%; left: 75%;"></div>
+            <div class="fruit" style="top: 40%; left: 25%;"></div>
+            <div class="fruit" style="top: 45%; left: 40%;"></div>
+            <div class="fruit" style="top: 50%; left: 65%;"></div>
+            <div class="fruit" style="top: 30%; left: 20%;"></div>
+            <div class="fruit" style="top: 55%; left: 30%;"></div>
+            <div class="fruit" style="top: 48%; left: 80%;"></div>
+
+            <a href="phamchat-sothich.html" class="root-btn root-1">Sở thích</a>
+            <a href="phamchat-khanang.html" class="root-btn root-2">Khả năng</a>
+            <a href="phamchat-catinh.html" class="root-btn root-3">Cá tính</a>
+            <a href="phamchat-giatri.html" class="root-btn root-4">Giá trị</a>
+        </div>
+    </div>
+</body>
+</html>
