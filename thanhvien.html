@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thành viên nhóm – Cây Nghề Nghiệp</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+            min-height: 100vh;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Thanh điều hướng trên cùng */
+        .navbar {
+            width: 100%;
+            max-width: 1200px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .navbar-brand {
+            text-decoration: none;
+            color: #1e40af;
+            font-size: 1.5rem;
+            font-weight: 800;
+        }
+
+        .back-btn {
+            text-decoration: none;
+            background: #3b82f6;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .back-btn:hover { background: #2563eb; }
+
+        /* Tiêu đề trang */
+        h1 {
+            color: #1e40af;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .subtitle {
+            color: #64748b;
+            font-size: 1.1rem;
+            margin-bottom: 50px;
+            text-align: center;
+        }
+
+        /* Lưới chứa các thẻ thành viên */
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            width: 100%;
+            max-width: 1100px;
+        }
+
+        /* Thiết kế thẻ */
+        .card {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 30px 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e2e8f0;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(37, 99, 235, 0.15);
+            border-color: #93c5fd;
+        }
+
+        /* Ảnh đại diện */
+        .card img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 20px;
+            border: 4px solid #eff6ff;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        /* Tên thành viên */
+        .card h2 {
+            font-size: 1.3rem;
+            color: #1e293b;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        /* Nội dung/Nhiệm vụ */
+        .card p {
+            font-size: 0.95rem;
+            color: #64748b;
+            line-height: 1.6;
+            margin-top: 10px;
+            padding-top: 15px;
+            border-top: 1px dashed #e2e8f0;
+            width: 100%;
+        }
+
+        /* Giao diện điện thoại */
+        @media (max-width: 600px) {
+            h1 { font-size: 2rem; }
+            .navbar { flex-direction: column; gap: 15px; }
+            .team-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="index.html" class="navbar-brand">CÂY NGHỀ NGHIỆP</a>
+        <a href="index.html" class="back-btn">← Quay lại Trang chủ</a>
+    </nav>
+
+    <h1>Hồ Sơ Thành Viên</h1>
+    <p class="subtitle">Nhóm thực hiện dự án Cây Nghề Nghiệp</p>
+
+    <div class="team-grid">
+        
+        <!-- THÀNH VIÊN 1 -->
+        <div class="card">
+            <!-- Ảnh tự động tạo chữ cái đầu. Nếu có ảnh thật, đổi src="ten-anh.jpg" -->
+            <img src="https://ui-avatars.com/api/?name=Nguyen+Quoc+Hao&background=2563eb&color=fff&size=128&font-size=0.4" alt="Nguyễn Quốc Hạo">
+            <h2>Nguyễn Quốc Hạo</h2>
+            <p>Đảm nhiệm phần: Lên ý tưởng, thiết kế giao diện (UI/UX) và code HTML/CSS.</p>
+        </div>
+
+        <!-- THÀNH VIÊN 2 -->
+        <div class="card">
+            <img src="https://ui-avatars.com/api/?name=Le+Van+Phi&background=10b981&color=fff&size=128&font-size=0.4" alt="Lê Văn Phi">
+            <h2>Lê Văn Phi</h2>
+            <p>Đảm nhiệm phần: Lập trình logic JavaScript (tương tác cây, hiệu ứng chuyển trang).</p>
+        </div>
+
+        <!-- THÀNH VIÊN 3 -->
+        <div class="card">
+            <img src="https://ui-avatars.com/api/?name=Tran+Huu+An&background=f59e0b&color=fff&size=128&font-size=0.4" alt="Trần Hữu An">
+            <h2>Trần Hữu An</h2>
+            <p>Đảm nhiệm phần: Viết nội dung (Content), thu thập thông tin và hỗ trợ thuyết trình.</p>
+        </div>
+
+        <!-- THÀNH VIÊN 4 -->
+        <div class="card">
+            <img src="https://ui-avatars.com/api/?name=Vuong+Huu+Dan&background=ec4899&color=fff&size=128&font-size=0.4" alt="Vương Hữu Đan">
+            <h2>Vương Hữu Đan</h2>
+            <p>Đảm nhiệm phần: Thiết kế đồ họa hình ảnh, tối ưu hóa hiển thị trên thiết bị di động.</p>
+        </div>
+
+    </div>
+
+</body>
+</html>

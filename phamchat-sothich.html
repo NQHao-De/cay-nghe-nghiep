@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sở thích – Phẩm chất</title>
+    <style>
+        :root {
+            --border: #cbd5e1;
+            --navbar-height: 64px;
+            --primary: #2563eb;
+            --root-color: #3b82f6;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+            height: 100vh;
+            overflow: hidden; /* Khóa cuộn toàn trang */
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* THANH ĐIỀU HƯỚNG */
+        .navbar {
+            height: var(--navbar-height);
+            background: #ffffff; border-bottom: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 24px; z-index: 1000;
+            flex-shrink: 0;
+        }
+        .navbar-brand { text-decoration: none; color: #1e40af; font-size: 1.2rem; font-weight: 800; }
+        .navbar-links { display: flex; gap: 8px; }
+        .nav-link { padding: 10px 18px; border-radius: 8px; text-decoration: none; color: #1e293b; font-weight: 600; }
+        .nav-link.active { background: var(--primary); color: #ffffff; }
+
+        /* BỐ CỤC CHÍNH: CHIA LÀM 2 CỘT LỚN */
+        .main-layout {
+            display: flex;
+            height: calc(100vh - var(--navbar-height));
+            width: 100vw;
+            padding: 20px;
+            gap: 20px;
+        }
+
+        /* --- CỘT TRÁI: VIDEO --- */
+        .left-column {
+            flex: 1; /* Chiếm 50% chiều ngang */
+            background: #000;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        /* KHUNG VIDEO */
+        .left-column iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* --- CỘT PHẢI: CHỨA CÂY VÀ NỘI DUNG --- */
+        .right-column {
+            flex: 1; /* Chiếm 50% chiều ngang */
+            display: flex;
+            flex-direction: column; /* Xếp dọc: Cây ở trên, Nội dung ở dưới */
+            gap: 20px;
+        }
+
+        /* Nửa trên của cột phải: CÁI CÂY */
+        .tree-section {
+            flex: 1; /* Chiếm 50% chiều dọc của cột phải */
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        /* Ảnh cái cây */
+        .tree-image {
+            height: 100%;
+            width: 100%;
+            object-fit: contain;
+            
+            /* === CHỖ CHỈNH CÂY LÊN TRÊN / ZOOM === */
+            /* Số âm ở translate Y (số thứ 2) sẽ kéo cây LÊN TRÊN */
+            /* Tăng số scale để phóng to cây */
+            transform: scale(5.0) translate(10%, -31%); 
+            transform-origin: center center;
+        }
+
+        /* Nút nhãn hiển thị tên nhánh (Sở thích) */
+        .root-label {
+            position: absolute;
+            background: var(--root-color); 
+            color: #fff;
+            padding: 8px 20px; 
+            border-radius: 30px; 
+            font-weight: 700; 
+            font-size: 4rem;
+            border: 3px solid #ffffff; 
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.6);
+            z-index: 10;
+            /* Vị trí nút trên cây */
+            bottom: 30%; 
+            right: 48%;
+        }
+
+        /* Nửa dưới của cột phải: NỘI DUNG */
+        .content-section {
+            flex: 1; /* Chiếm 50% chiều dọc của cột phải */
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            padding: 30px;
+            border: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+        }
+
+        .content-section h2 {
+            color: var(--primary);
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            border-bottom: 2px dashed var(--border);
+            padding-bottom: 10px;
+        }
+
+        .content-section p {
+            font-size: 1.05rem;
+            line-height: 1.8;
+            color: #475569;
+            text-align: justify;
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            background: #334155;
+            color: white;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+        .back-btn:hover { background: #475569; }
+
+        /* Giao diện điện thoại: Xếp dọc */
+        @media (max-width: 900px) {
+            .main-layout {
+                flex-direction: column;
+                overflow-y: auto; 
+                padding: 10px;
+                height: auto;
+            }
+            .left-column { min-height: 250px; }
+            
+            /* THÊM DÒNG NÀY ĐỂ ẨN CÂY TRÊN ĐIỆN THOẠI */
+            .tree-section { 
+                display: none; 
+            }
+            
+            .content-section { padding: 20px; }
+            .back-btn { position: static; align-self: flex-start; margin-bottom: 15px; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="index.html" class="navbar-brand">CÂY NGHỀ NGHIỆP</a>
+    </nav>
+
+    <div class="main-layout">
+        
+        <!-- 1. CỘT TRÁI: VIDEO -->
+        <div class="left-column">
+            <!-- THÊM VIDEO: Bạn thay link youtube vào src -->
+            <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&mute=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        </div>
+
+        <!-- 2. CỘT PHẢI: CÂY VÀ NỘI DUNG -->
+        <div class="right-column">
+            
+            <!-- PHẦN TRÊN: CÂY -->
+            <div class="tree-section">
+                <img src="cay.png" alt="Cây Nghề Nghiệp" class="tree-image">
+                <div class="root-label">Sở thích</div>
+            </div>
+
+            <!-- PHẦN DƯỚI: NỘI DUNG -->
+            <div class="content-section">
+                <a href="noidung.html" class="back-btn">← Quay lại</a>
+                <h2>Sở thích</h2>
+                <p>
+                    Người yêu thích ngành Công nghệ thông tin thường đam mê tìm hiểu về máy tính, phần mềm, công nghệ và Internet. Họ hứng thú với việc lập trình, thiết kế website, phát triển ứng dụng, khám phá trí tuệ nhân tạo (AI) và tìm kiếm giải pháp cho những vấn đề liên quan đến công nghệ.
+                </p>
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>
