@@ -18,12 +18,12 @@
             background: #f8fafc;
             color: #1e293b;
             height: 100vh;
-            overflow: hidden; /* Khóa cuộn toàn trang */
+            overflow: hidden; 
             display: flex;
             flex-direction: column;
         }
         
-        /* THANH ĐIỀU HƯỚNG */
+        
         .navbar {
             height: var(--navbar-height);
             background: #ffffff; border-bottom: 1px solid var(--border);
@@ -36,7 +36,7 @@
         .nav-link { padding: 10px 18px; border-radius: 8px; text-decoration: none; color: #1e293b; font-weight: 600; }
         .nav-link.active { background: var(--primary); color: #ffffff; }
 
-        /* BỐ CỤC CHÍNH: CHIA LÀM 2 CỘT LỚN */
+        
         .main-layout {
             display: flex;
             height: calc(100vh - var(--navbar-height));
@@ -45,9 +45,9 @@
             gap: 20px;
         }
 
-        /* --- CỘT TRÁI: VIDEO --- */
+       
         .left-column {
-            flex: 1; /* Chiếm 50% chiều ngang */
+            flex: 1; 
             background: #000;
             border-radius: 16px;
             overflow: hidden;
@@ -61,17 +61,17 @@
             border: none;
         }
 
-        /* --- CỘT PHẢI: CHỨA CÂY VÀ NỘI DUNG --- */
+        
         .right-column {
-            flex: 1; /* Chiếm 50% chiều ngang */
+            flex: 1; 
             display: flex;
-            flex-direction: column; /* Xếp dọc: Cây ở trên, Nội dung ở dưới */
+            flex-direction: column; 
             gap: 20px;
         }
 
-        /* Nửa trên của cột phải: CÁI CÂY */
+        
         .tree-section {
-            flex: 1; /* Chiếm 50% chiều dọc của cột phải */
+            flex: 1; 
             background: #ffffff;
             border-radius: 16px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.05);
@@ -83,20 +83,18 @@
             border: 1px solid var(--border);
         }
 
-        /* Ảnh cái cây */
+     
         .tree-image {
             height: 100%;
             width: 100%;
             object-fit: contain;
             
-            /* === CHỖ CHỈNH CÂY LÊN TRÊN / ZOOM === */
-            /* Số âm ở translate Y (số thứ 2) sẽ kéo cây LÊN TRÊN */
-            /* Tăng số scale để phóng to cây */
+            
             transform: scale(5.0) translate(10%, -31%); 
             transform-origin: center center;
         }
 
-        /* Nút nhãn hiển thị tên nhánh (Sở thích) */
+        
         .root-label {
             position: absolute;
             background: var(--root-color); 
@@ -108,14 +106,14 @@
             border: 3px solid #ffffff; 
             box-shadow: 0 4px 15px rgba(59, 130, 246, 0.6);
             z-index: 10;
-            /* Vị trí nút trên cây */
+        
             bottom: 30%; 
             right: 48%;
         }
 
-        /* Nửa dưới của cột phải: NỘI DUNG */
+        
         .content-section {
-            flex: 1; /* Chiếm 50% chiều dọc của cột phải */
+            flex: 1; 
             background: #ffffff;
             border-radius: 16px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.05);
@@ -157,7 +155,7 @@
         }
         .back-btn:hover { background: #475569; }
 
-        /* Giao diện điện thoại: Xếp dọc */
+        
         @media (max-width: 900px) {
             .main-layout {
                 flex-direction: column;
@@ -167,7 +165,7 @@
             }
             .left-column { min-height: 250px; }
             
-            /* THÊM DÒNG NÀY ĐỂ ẨN CÂY TRÊN ĐIỆN THOẠI */
+            
             .tree-section { 
                 display: none; 
             }
@@ -184,25 +182,22 @@
 
     <div class="main-layout">
         
-        <!-- 1. CỘT TRÁI: VIDEO -->
+       
         <div class="left-column">
-            <!-- SỬA CHỖ NÀY: Đổi contain thành cover -->
             <video controls style="width: 100%; height: 100%; object-fit: cover; border-radius: 16px; display: block;">
                 <source src="nd1.mp4" type="video/mp4">
                 Trình duyệt của bạn không hỗ trợ thẻ video.
             </video>
         </div>
 
-        <!-- 2. CỘT PHẢI: CÂY VÀ NỘI DUNG -->
+    
         <div class="right-column">
             
-            <!-- PHẦN TRÊN: CÂY -->
+            
             <div class="tree-section">
                 <img src="cay.png" alt="Cây Nghề Nghiệp" class="tree-image">
                 <div class="root-label">Sở thích</div>
             </div>
-
-            <!-- PHẦN DƯỚI: NỘI DUNG -->
             <div class="content-section">
                 <a href="noidung.html" class="back-btn">← Quay lại</a>
                 <h2>Sở thích</h2>
